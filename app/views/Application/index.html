@@ -1,0 +1,34 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+
+#{ifnot tasks}
+<p>
+Tasks illayae
+</p>
+#{/ifnot}
+ 
+<ul>
+#{list items:tasks, as:'task'}
+<li>
+<input type="checkbox" id="${task.id}" ${task.done ? 'checked' : ''}>
+$(task.title)
+</li>
+#{/list}
+</ul>
+<p>
+<a id="createTask" href="#">Create a new task</a>
+</p>
+
+<script type="text/javascript" charset="utf-8">
+// Create a task
+$('#createTask').click(function() {
+$.post('@createTask()}', {title: prompt('Task title Ennanga')}, function(task){
+$('ul').prepend(
+'<li><input type="checkbox" id="'+task.id+'">'+task.title+'</li>'
+)
+},'json')
+})
+$('input').live('click', function() {
+	$.post('@{changeStatus()}', {id: $(this).attr('id'), done: $(this).val()})
+})
+</script>
